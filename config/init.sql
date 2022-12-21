@@ -1,0 +1,3 @@
+-- CREATE DATABASE IF NOT EXISTS 
+SELECT 'CREATE DATABASE danikleandb'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'danikleandb')
