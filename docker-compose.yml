@@ -1,12 +1,12 @@
 version: '3.1'
 
 services: 
-  daniklean_pg:
+  kanban_task_pg:
     image: postgres:15.1
-    container_name: daniklean_pg
+    container_name: kanban_task_pg
     restart: always
     environment:
-      POSTGRES_DB: 'danikleandb'
+      POSTGRES_DB: 'kanban_task_pg'
       POSTGRES_USER: 'udaniklean'
       POSTGRES_PASSWORD: 'secretDaniklean'
     volumes:

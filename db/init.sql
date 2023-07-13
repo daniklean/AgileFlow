@@ -1,3 +1,3 @@
 -- CREATE DATABASE IF NOT EXISTS 
-SELECT 'CREATE DATABASE danikleandb'
-WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'danikleandb')
+SELECT 'CREATE DATABASE kanban_task_pg'
+WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = 'kanban_task_pg')
