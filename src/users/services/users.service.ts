@@ -4,6 +4,7 @@ import { DeleteResult, Repository, UpdateResult } from 'typeorm';
 
 import { UsersEntity } from '../entities/users.entity';
 import { UserDTO, UserUpdateDTO } from '../dto/users.dto';
+import { ErrorManager } from '../../utils/http.manager';
 
 @Injectable()
 export class UsersService {
@@ -16,26 +17,40 @@ export class UsersService {
     try {
       return await this.userRepository.save(body);
     } catch (error) {
-      throw new Error(error);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findUsers(): Promise<UsersEntity[] | null> {
     try {
-      return await this.userRepository.find();
+      const users: UsersEntity[] = await this.userRepository.find();
+      if (users.length === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'Not exits users list',
+        });
+      }
+      return users;
     } catch (error) {
-      throw new Error(error);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async findUserByID(id: string): Promise<UsersEntity | null> {
     try {
-      return await this.userRepository
+      const userByID = await this.userRepository
         .createQueryBuilder('user')
         .where({ id })
         .getOne();
+      if (!userByID) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'Not exits user by ID',
+        });
+      }
+      return userByID;
     } catch (error) {
-      throw new Error(error);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
@@ -44,25 +59,34 @@ export class UsersService {
     body: UserUpdateDTO,
   ): Promise<UpdateResult | null> {
     try {
-      const user: UpdateResult = await this.userRepository.update(id, body);
-      if (user.affected === 0) {
-        return null;
+      const userUpdate: UpdateResult = await this.userRepository.update(
+        id,
+        body,
+      );
+      if (userUpdate.affected === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'Not update user',
+        });
       }
-      return user;
+      return userUpdate;
     } catch (error) {
-      throw new Error(error);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 
   public async deleteUser(id: string): Promise<DeleteResult | null> {
     try {
-      const user: DeleteResult = await this.userRepository.delete(id);
-      if (user.affected === 0) {
-        return null;
+      const userDelete: DeleteResult = await this.userRepository.delete(id);
+      if (userDelete.affected === 0) {
+        throw new ErrorManager({
+          type: 'BAD_REQUEST',
+          message: 'Not delete user',
+        });
       }
-      return user;
+      return userDelete;
     } catch (error) {
-      throw new Error(error);
+      throw ErrorManager.createSignatureError(error.message);
     }
   }
 }
