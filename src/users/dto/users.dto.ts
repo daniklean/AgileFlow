@@ -4,8 +4,12 @@ import {
   IsNumber,
   IsOptional,
   IsString,
+  IsUUID,
 } from 'class-validator';
-import { ROLES } from 'src/config/roles';
+
+import { ACCESS_LEVEL, ROLES } from '../../config/roles';
+import { UsersEntity } from '../entities/users.entity';
+import { ProjectEntity } from '../../projects/entities/projects.entity';
 
 export class UserDTO {
   @IsNotEmpty()
@@ -65,4 +69,18 @@ export class UserUpdateDTO {
   @IsOptional()
   @IsEnum(ROLES)
   role: ROLES;
+}
+
+export class AssignedProjectDTO {
+  @IsNotEmpty()
+  @IsUUID()
+  user: UsersEntity;
+
+  @IsNotEmpty()
+  @IsUUID()
+  project: ProjectEntity;
+
+  @IsNotEmpty()
+  @IsEnum(ACCESS_LEVEL)
+  accessLevel: ACCESS_LEVEL;
 }

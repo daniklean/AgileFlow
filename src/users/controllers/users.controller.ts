@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { UsersService } from '../services/users.service';
-import { UserDTO, UserUpdateDTO } from '../dto/users.dto';
+import { AssignedProjectDTO, UserDTO, UserUpdateDTO } from '../dto/users.dto';
 
 @Controller('users')
 export class UsersController {
@@ -56,5 +56,13 @@ export class UsersController {
   @Delete('delete:id')
   public async deleteUser(@Param('id') id: string) {
     return await this.UsersService.deleteUser(id);
+  }
+
+  @Post('assigned-project')
+  /**
+   * assignedProject
+   */
+  public async assignedProject(@Body() body: AssignedProjectDTO) {
+    return await this.UsersService.assignedProjectRelation(body);
   }
 }
