@@ -53,6 +53,8 @@ body: ProjectDTO   */
       const project: ProjectEntity = await this.projectRepository
         .createQueryBuilder('projects')
         .where({ id })
+        .leftJoinAndSelect('projects.usersIncludes', 'usersIncludes')
+        .leftJoinAndSelect('usersIncludes.user', 'user')
         .getOne();
       if (!project) {
         throw new ErrorManager({
