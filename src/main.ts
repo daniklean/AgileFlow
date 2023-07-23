@@ -1,9 +1,10 @@
 import { ConfigService } from '@nestjs/config';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { NestFactory, Reflector } from '@nestjs/core';
 import * as morgan from 'morgan';
+import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+
+import { AppModule } from './app.module';
 import { CORS } from './config';
-import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,6 +18,11 @@ async function bootstrap() {
       },
     }),
   );
+
+  const reflector = app.get(Reflector);
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
+
   const configService = app.get(ConfigService);
 
   app.enableCors(CORS);
