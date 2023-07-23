@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DeleteResult, Repository, UpdateResult } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 import { UsersEntity } from '../entities/users.entity';
 import { AssignedProjectDTO, UserDTO, UserUpdateDTO } from '../dto/users.dto';
@@ -18,6 +19,10 @@ export class UsersService {
 
   public async createUser(body: UserDTO): Promise<UsersEntity | null> {
     try {
+      body.password = await bcrypt.hash(
+        body.password,
+        Number(process.env.HASH_SALT),
+      );
       return await this.userRepository.save(body);
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
@@ -54,6 +59,30 @@ export class UsersService {
         });
       }
       return userByID;
+    } catch (error) {
+      throw ErrorManager.createSignatureError(error.message);
+    }
+  }
+
+  public async findBy(usernameOrEmail: string): Promise<UsersEntity | null> {
+    try {
+      const userFindByUsernameOrEmail = await this.userRepository
+        .createQueryBuilder('user')
+        .addSelect('user.password')
+        .where((qb) => {
+          qb.where('user.email = :usernameOrEmail', {
+            usernameOrEmail,
+          }).orWhere('user.username = :usernameOrEmail', { usernameOrEmail });
+        })
+        .getOne();
+
+      if (!userFindByUsernameOrEmail) {
+        throw new ErrorManager({
+          type: 'NOT_FOUND',
+          message: 'Not Found by Username or Email',
+        });
+      }
+      return userFindByUsernameOrEmail;
     } catch (error) {
       throw ErrorManager.createSignatureError(error.message);
     }
