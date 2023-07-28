@@ -54,7 +54,7 @@ export class UsersService {
         .getOne();
       if (!userByID) {
         throw new ErrorManager({
-          type: 'BAD_REQUEST',
+          type: 'UNAUTHORIZED',
           message: 'Not exits user by ID',
         });
       }
