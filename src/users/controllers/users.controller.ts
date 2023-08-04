@@ -13,9 +13,11 @@ import { UsersService } from '../services/users.service';
 import { AssignedProjectDTO, UserDTO, UserUpdateDTO } from '../dto/users.dto';
 import { PublicAccess } from '../../auth/decorators/public.decorator';
 import { AuthGuard } from '../../auth/guards/auth.guard';
+import { Roles } from '../../auth/decorators/roles.decorator';
+import { RolesGuard } from '../../auth/guards/roles.guard';
 
 @Controller('users')
-@UseGuards(AuthGuard)
+@UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly UsersService: UsersService) {}
 
@@ -30,6 +32,7 @@ export class UsersController {
   /**
    * allUsers
    */
+  @Roles('ADMIN')
   @Get('all')
   public async allUsers() {
     return await this.UsersService.findUsers();
@@ -38,7 +41,7 @@ export class UsersController {
   /**
    * userFindByID
    */
- @PublicAccess()
+  @PublicAccess()
   @Get(':id')
   public async userFindByID(@Param('id') id: string) {
     return await this.UsersService.findUserByID(id);
