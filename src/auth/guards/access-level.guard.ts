@@ -9,7 +9,7 @@ import {
   PUBLIC_KEY,
   ROLES_KEY,
 } from '../../config/keys.decorators';
-import { ROLES } from '../../config/roles';
+import { ACCESS_LEVEL, ROLES } from '../../config/roles';
 import { ErrorManager } from '../../utils/http.manager';
 import { UsersService } from '../../users/services/users.service';
 
@@ -35,7 +35,7 @@ export class AccessLevelGuard implements CanActivate {
         context.getHandler(),
       );
 
-      const accessLevel = this.reflector.get<number>(
+      const accessLevel = this.reflector.get<keyof typeof ACCESS_LEVEL>(
         ACCESS_LEVEL_KEY,
         context.getHandler(),
       );
@@ -61,7 +61,7 @@ export class AccessLevelGuard implements CanActivate {
         }
       }
 
-      if (roleUser === ROLES.ADMIN) {
+      if (roleUser === ROLES.ADMIN || roleUser === ROLES.CREATOR) {
         return true;
       }
 
@@ -78,7 +78,7 @@ export class AccessLevelGuard implements CanActivate {
         });
       }
 
-      if (accessLevel !== userExistInProject.accessLevel) {
+      if (ACCESS_LEVEL[accessLevel] > userExistInProject.accessLevel) {
         throw new ErrorManager({
           type: 'UNAUTHORIZED',
           message: 'Need access level necessary for request',
