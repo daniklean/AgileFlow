@@ -35,7 +35,7 @@ export class AuthService {
     }
   }
 
-  public async singJWT({ payload, secret, expires }: ISingJWT) {
+  public async signJWT({ payload, secret, expires }: ISingJWT) {
     return jwt.sign(payload, secret, { expiresIn: expires });
   }
 
@@ -48,7 +48,7 @@ export class AuthService {
     };
 
     return {
-      accessToken: await this.singJWT({
+      accessToken: await this.signJWT({
         payload,
         secret: process.env.JWT_SECRET,
         expires: '1h',
