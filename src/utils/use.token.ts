@@ -12,7 +12,6 @@ export const useToken = (token: string): IUseToken | string => {
       sub: decode.sub,
       role: decode.role,
       isExpired: Number(expiresDate) <= Number(currentDate) / 1000,
-      
     };
   } catch (error) {
     return 'Token is invalid';
