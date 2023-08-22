@@ -8,6 +8,7 @@ import {
   Put,
   UseGuards,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from '../services/users.service';
 import { AssignedProjectDTO, UserDTO, UserUpdateDTO } from '../dto/users.dto';
@@ -16,15 +17,17 @@ import { AuthGuard } from '../../auth/guards/auth.guard';
 import { Roles } from '../../auth/decorators/roles.decorator';
 import { RolesGuard } from '../../auth/guards/roles.guard';
 
+@ApiTags('Users')
 @Controller('users')
 @UseGuards(AuthGuard, RolesGuard)
 export class UsersController {
   constructor(private readonly UsersService: UsersService) {}
 
-  @Post('register')
   /**
    * registrerUser
    */
+  @PublicAccess()
+  @Post('register')
   public async registrerUser(@Body() body: UserDTO) {
     return await this.UsersService.createUser(body);
   }
@@ -41,18 +44,18 @@ export class UsersController {
   /**
    * userFindByID
    */
-  @PublicAccess()
-  @Get(':id')
-  public async userFindByID(@Param('id') id: string) {
+
+  @Get(':userId')
+  public async userFindByID(@Param('userId') id: string) {
     return await this.UsersService.findUserByID(id);
   }
 
   /**
    * updateUser
    */
-  @Put('edit:id')
+  @Put(':userId')
   public async updateUser(
-    @Param('id') id: string,
+    @Param('userId') id: string,
     @Body() body: UserUpdateDTO,
   ) {
     return await this.UsersService.updateUser(id, body);
@@ -61,8 +64,8 @@ export class UsersController {
   /**
    * deleteUser
    */
-  @Delete('delete:id')
-  public async deleteUser(@Param('id') id: string) {
+  @Delete(':userId')
+  public async deleteUser(@Param('userId') id: string) {
     return await this.UsersService.deleteUser(id);
   }
 
