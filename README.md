@@ -1,73 +1,63 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Agiflow: Gestión de Proyectos API REST :gear:
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> Este repositorio contiene el código fuente de **Agiflow** diseñado para facilitar la lógica de gestión de proyectos.
+>
+> Desarrollado con amor por [Daniklean](https://github.com/daniklean).
 
-## Description
+Las principales tecnologías que usamos son:
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- [NestJS](https://nestjs.com/): Framework para construir aplicaciones server-side eficientes y escalables en Node.js.
+- [Postgres](https://www.postgresql.org/): Sistema de gestión de bases de datos relacional.
+- [Docker](https://www.docker.com/): Plataforma de contenedorización de aplicaciones.
+- [Docker Compose](https://docs.docker.com/compose/): Herramienta para definir y correr multi-contenedor Docker aplicaciones.
 
-## Installation
+## :point_up: ¿Quieres probar el desarrollo de esta API? - Prerrequisitos - *instalar antes de comenzar.*
 
-```bash
-$ npm install
+Necesitarás un IDE o al menos un editor de texto que coloree la sintaxis. Recomendamos usar [Visual Studio Code](https://code.visualstudio.com/) con los siguientes plugins:
+
+- [ESlint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+- [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode)
+
+Para ejecutar el código necesitarás tener NodeJS. Recomendamos usar [`nvm`](https://github.com/nvm-sh/nvm) para la instalación.
+
+## :ballot_box_with_check: Configuración inicial del proyecto
+
+Suponiendo que ya has configurado todos los prerrequisitos, estos son los comandos que debes ejecutar la primera vez que trabajas en tu proyecto:
+
+```shell
+# Copia las variables de entorno en tu archivo .env.
+cp .env.example .env
+
+## Recuerda, debes ingresar tus credenciales.
+
+# Instala las dependencias del proyecto.
+npm install
 ```
 
-## Running the app
+## :woman_technologist: :man_technologist: Comandos útiles para el uso diario
 
-```bash
-# development
-$ npm run start
+```shell
+# Construir el proyecto
+npm run build
 
-# watch mode
-$ npm run start:dev
+# Iniciar el servidor en modo desarrollo
+npm run start:dev
 
-# production mode
-$ npm run start:prod
-```
+# Iniciar el servidor en modo producción
+npm run start:prod
 
-## Test
+# Correr ESLint y Prettier, corrigiendo posibles errores y formateando el código.
+npm run lint
 
-```bash
-# unit tests
-$ npm run test
+# Ejecutar las pruebas unitarias
+npm run test
 
-# e2e tests
-$ npm run test:e2e
+# Ejecutar las pruebas y esperar cambios
+npm run test:watch
 
-# test coverage
-$ npm run test:cov
-```
+# Generar migraciones de la base de datos
+npm run m:gen
 
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+# Ejecutar migraciones de la base de datos
+npm run m:run
