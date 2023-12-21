@@ -1,24 +1,22 @@
 image: node:alpine
 
 stages:
-  - build
   - deploy
-
-build_application:
-  stage: build
-  before_script:
-    - npm install
-  script:
-    - npm run build
-  only:
-    - main
 
 deploy_application:
   stage: deploy
   before_script:
-  - chmod +x ci/deploy_script.sh
+    - npm install
+    - npm run build
+    - chmod +x ./ci/deploy_script.sh
   script:
+    - echo "Imprime el directorio actual:"
+    - pwd
+    - echo "Contenido de Package.json:"
+    - cat package.json
+    - echo "Contenido de ci/deploy_script.sh:"
+    - cat ./ci/deploy_script.sh
     - echo "Desplegando la aplicación"
-    - ci/deploy_script.sh
+    - ./ci/deploy_script.sh
   only:
     - main
