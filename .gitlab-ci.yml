@@ -8,11 +8,12 @@ deploy_application:
   before_script:
     - npm install
     - npm run build
-    - chmod +x $CI_PROJECT_DIR/ci/deploy_script.sh
   script:
     - echo "Imprime el directorio actual:"
-    - $CI_PROJECT_DIR
-    - echo "Desplegando la aplicación"
+    - pwd
+    - echo "El directorio del proyecto es: $CI_PROJECT_DIR"
+    - chmod +x $CI_PROJECT_DIR/ci/deploy_script.sh
     - $CI_PROJECT_DIR/ci/deploy_script.sh
   only:
     - main
+    
