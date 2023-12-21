@@ -9,9 +9,9 @@ deploy_application:
     - npm install
     - npm run build
   script:
-    - echo "Imprime el directorio actual:"
-    - pwd
-    - chmod +x ./deploy_script.sh
-    - ./deploy_script.sh
+  - echo "Listando el contenido del directorio actual:"
+  - ls -la
+  - chmod +x ./deploy_script.sh
+  - ./deploy_script.sh
   only:
     - main
