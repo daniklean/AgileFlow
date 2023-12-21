@@ -1,0 +1,35 @@
+#!/bin/bash
+set -e
+
+echo "Inicio del script de despliegue."
+
+echo "Verificando las variables de entorno"
+echo "IP de la instancia EC2: $EC2_INSTANCE_IP"
+echo "Directorio de destino en EC2: $APP_DIR"
+
+BUILD_DIRECTORY="dist/"
+echo "Directorio de construcción: $BUILD_DIRECTORY"
+
+echo "Iniciando la sincronización del build con la instancia EC2"
+rsync -avz -e "ssh -i $SSH_KEY_PATH" $BUILD_DIRECTORY ubuntu@$EC2_INSTANCE_IP:$APP_DIR
+echo "Sincronización completada."
+
+# Iniciando el proceso de despliegue en la instancia EC2
+echo "Iniciando el despliegue en la instancia EC2"
+ssh -i $SSH_KEY_PATH ubuntu@$EC2_INSTANCE_IP << EOF
+  echo "Conectado a la instancia EC2."
+
+  # Navegar al directorio de la aplicación
+  echo "Navegando al directorio de la aplicación: $APP_DIR"
+  cd $APP_DIR
+
+  # Reiniciar la aplicación utilizando PM2
+  echo "Reiniciando la aplicación con PM2"
+  pm2 restart agile-flow
+  echo "Aplicación reiniciada con PM2."
+
+  echo "Despliegue completado en la instancia EC2."
+EOF
+echo "Despliegue finalizado en la máquina local."
+
+echo "Script de despliegue finalizado exitosamente."
