@@ -7,16 +7,23 @@ echo "Verificando las variables de entorno"
 echo "IP de la instancia EC2: $EC2_INSTANCE_IP"
 echo "Directorio de destino en EC2: $APP_DIR"
 
+# Configurar el agente SSH y agregar la llave
+eval $(ssh-agent -s)
+echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+mkdir -p ~/.ssh
+chmod 700 ~/.ssh
+echo "StrictHostKeyChecking no" > ~/.ssh/config
+
 BUILD_DIRECTORY="dist/"
 echo "Directorio de construcción: $BUILD_DIRECTORY"
 
 echo "Iniciando la sincronización del build con la instancia EC2"
-rsync -avz -e "ssh -i $SSH_KEY_PATH" $BUILD_DIRECTORY ubuntu@$EC2_INSTANCE_IP:$APP_DIR
+rsync -avz -e "ssh" $BUILD_DIRECTORY ubuntu@$EC2_INSTANCE_IP:$APP_DIR
 echo "Sincronización completada."
 
 # Iniciando el proceso de despliegue en la instancia EC2
 echo "Iniciando el despliegue en la instancia EC2"
-ssh -i $SSH_KEY_PATH ubuntu@$EC2_INSTANCE_IP << EOF
+ssh ubuntu@$EC2_INSTANCE_IP << EOF
   echo "Conectado a la instancia EC2."
 
   # Navegar al directorio de la aplicación

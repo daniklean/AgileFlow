@@ -6,6 +6,7 @@ stages:
 deploy_application:
   stage: deploy
   before_script:
+    - apt-get update && apt-get install -y rsync
     - npm install
     - npm run build
   script:
