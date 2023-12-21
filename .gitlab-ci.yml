@@ -1,17 +1,13 @@
 image: node:alpine
 
 stages:
-  - install
   - build
   - deploy
 
-install_dependencies:
-  stage: install
-  script:
-    - npm install
-
 build_application:
   stage: build
+  before_script:
+    - npm install
   script:
     - npm run build
   only:
