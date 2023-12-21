@@ -19,6 +19,6 @@ deploy_application:
   - chmod +x ci/deploy_script.sh
   script:
     - echo "Desplegando la aplicación"
-    - ./ci/deploy_script.sh
+    - ci/deploy_script.sh
   only:
     - main
