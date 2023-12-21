@@ -11,9 +11,7 @@ deploy_application:
   script:
     - echo "Imprime el directorio actual:"
     - pwd
-    - echo "El directorio del proyecto es: $CI_PROJECT_DIR"
     - chmod +x $CI_PROJECT_DIR/ci/deploy_script.sh
     - $CI_PROJECT_DIR/ci/deploy_script.sh
   only:
     - main
-    
