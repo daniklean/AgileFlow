@@ -32,7 +32,7 @@ ssh ubuntu@$EC2_INSTANCE_IP << EOF
 
   # Reiniciar la aplicación utilizando PM2
   echo "Reiniciando la aplicación con PM2"
-  pm2 restart 0
+  /home/ubuntu/.nvm/versions/node/v16.20.2/bin/pm2 restart 0
   echo "Aplicación reiniciada con PM2."
 
   echo "Despliegue completado en la instancia EC2."
