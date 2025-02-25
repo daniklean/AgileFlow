@@ -1,15 +1,18 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+import { JwtService } from '@nestjs/jwt';
 
 import { UsersService } from '../../users/services/users.service';
 import { ErrorManager } from '../../utils/http.manager';
-import { ISingJWT, IPayloadToken } from '../interfaces/auth.interface';
+import { ISingJWT, IPayloadToken, ISingUserJWT } from '../interfaces/auth.interface';
 import { UsersEntity } from '../../users/entities/users.entity';
 
 @Injectable()
 export class AuthService {
-  constructor(private readonly userServices: UsersService) {}
+  constructor(
+    private readonly userServices: UsersService,
+    private readonly jwtService: JwtService,
+  ) { }
 
   public async userValidate(usernameOrEmail: string, password: string) {
     try {
@@ -35,11 +38,11 @@ export class AuthService {
     }
   }
 
-  public async signJWT({ payload, secret, expires }: ISingJWT) {
-    return jwt.sign(payload, secret, { expiresIn: expires });
+  public async signJWT({ payload }: ISingJWT) {
+    return this.jwtService.sign(payload);
   }
 
-  public async generateJWT(user: UsersEntity): Promise<any> {
+  public async generateJWT(user: UsersEntity): Promise<ISingUserJWT> {
     const getUser = await this.userServices.findUserByID(user.id);
 
     const payload: IPayloadToken = {
@@ -49,9 +52,7 @@ export class AuthService {
 
     return {
       accessToken: await this.signJWT({
-        payload,
-        secret: process.env.JWT_SECRET,
-        expires: '1h',
+        payload
       }),
       user,
     };

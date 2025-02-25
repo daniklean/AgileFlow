@@ -1,6 +1,7 @@
 import { JwtPayload } from 'jsonwebtoken';
 
 import { ROLES } from '../../config/roles';
+import { UserDTO } from '../../users/dto/users.dto'
 
 export interface IPayloadToken {
   sub: string;
@@ -9,8 +10,8 @@ export interface IPayloadToken {
 
 export interface ISingJWT {
   payload: JwtPayload;
-  secret: string;
-  expires: number | string;
+  secret?: string;
+  expires?: number | string;
 }
 
 export interface IAuthLogin {
@@ -29,4 +30,9 @@ export interface IUseToken {
   role: string;
   sub: string;
   isExpired: boolean;
+}
+
+export interface ISingUserJWT {
+ accessToken: string;
+ user: UserDTO;
 }

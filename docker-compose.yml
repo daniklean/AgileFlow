@@ -1,15 +1,109 @@
-version: '3.1'
-
-services: 
-  kanban_task_pg:
+services:
+  database_service_pg:
     image: postgres:15.1
-    container_name: kanban_task_pg
-    restart: always
-    environment:
-      POSTGRES_DB: 'kanban_task_pg'
-      POSTGRES_USER: 'udaniklean'
-      POSTGRES_PASSWORD: 'secretDaniklean'
+    container_name: postgres_kanban_pg
+    env_file: ".development.env"
+    networks:
+      deployment_network:
+        aliases:
+          - database-pg
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 5432:5432 
+      - "${DB_PORT}:5432"
+    profiles: ['api-db', 'api-dev']
+
+  backend_service_dev:
+    container_name: api-development
+    restart: unless-stopped
+    depends_on:
+      - database_service_pg
+    build:
+      target: dev
+      context: .
+      args:
+        - PORT=${PORT}
+    ports:
+      - "${PORT}:${PORT}"
+      - "9229:9229"
+    profiles: ['api-dev']
+    env_file:
+        - .development.env
+    volumes:
+      - ./src:/app/src
+    networks:
+      deployment_network:
+        aliases:
+          - api-development
+
+  backend_service_prod:
+    container_name: "${API_NAME_1}"
+    build:
+      context: .
+      target: production
+      args:
+        - PORT=${PORT}
+    depends_on:
+      - database_service_pg
+    ports:
+      - "${PORT1}:${PORT}"
+    profiles: ['api-prod']
+    env_file:
+        - .production.env
+    environment:
+        API_NAME: "${API_NAME_1}"
+    networks:
+      deployment_network:
+        aliases:
+          - "${API_NAME_1}"
+
+  backend_service_prod_2:
+    container_name: "${API_NAME_2}"
+    build:
+      context: .
+      target: production
+      args:
+        - PORT=${PORT}
+    depends_on:
+      - database_service_pg
+    ports:
+      - "${PORT2}:${PORT}"
+    profiles: ['api-prod']
+    env_file:
+        - .production.env
+    environment:
+        API_NAME: "${API_NAME_2}"
+    networks:
+      deployment_network:
+        aliases:
+          - "${API_NAME_2}"
+
+  backend_service_prod_3:
+    container_name: "${API_NAME_3}"
+    build:
+      context: .
+      target: production
+      args:
+        - PORT=${PORT}
+    depends_on:
+      - database_service_pg
+    ports:
+      - "${PORT3}:${PORT}"
+    profiles: ['api-prod']
+    env_file:
+        - .production.env
+    environment:
+        API_NAME: "${API_NAME_3}"
+    networks:
+      deployment_network:
+        aliases:
+          - "${API_NAME_3}"
+
+  nginx_proxy: 
+    image: jrcs/letsencrypt-nginx-proxy-companion
+    ports: 
+      - "80:80"
+      - "443:443"
+
+networks:
+  deployment_network:

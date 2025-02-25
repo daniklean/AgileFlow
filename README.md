@@ -1,7 +1,7 @@
-# Agiflow: Gestión de Proyectos API REST :gear:
+# Challenge API REST :gear:
 
 
-> Este repositorio contiene el código fuente de **Agiflow** diseñado para facilitar la lógica de gestión de proyectos.
+> Este repositorio contiene el código fuente de **API AGILIA CENTER - CHALLENGE** diseñado para la prueba tecnica.
 >
 > Desarrollado con amor por [Daniklean](https://github.com/daniklean).
 
@@ -29,35 +29,38 @@ Suponiendo que ya has configurado todos los prerrequisitos, estos son los comand
 # Copia las variables de entorno en tu archivo .env.
 cp .env.example .env
 
-## Recuerda, debes ingresar tus credenciales.
+## Recuerda, debes ingresar credenciales que se infieren en el env example.
 
 # Instala las dependencias del proyecto.
-npm install
+pnpm i
 ```
 
-## :woman_technologist: :man_technologist: Comandos útiles para el uso diario
+## :woman_technologist: :man_technologist: Comandos útiles para inicializar el proyecto
 
 ```shell
 # Construir el proyecto
-npm run build
+pnpm run build
+
+# Ejecutar Docker Compose - Ubicate en la raiz del proyecto
+docker compose up 
 
 # Iniciar el servidor en modo desarrollo
-npm run start:dev
+pnpm run start:dev
 
 # Iniciar el servidor en modo producción
-npm run start:prod
+pnpm run start:prod - Debes agregar el NODE_ENV .production.env con tus variables de production
 
 # Correr ESLint y Prettier, corrigiendo posibles errores y formateando el código.
-npm run lint
+pnpm run lint
 
-# Ejecutar las pruebas unitarias
-npm run test
+## QA SECTION - Es necesario crear un endpoint logout?.
 
-# Ejecutar las pruebas y esperar cambios
-npm run test:watch
+Para este challenge, el objetivo fue implementar una estrategia para la Autenticacion y Autorizacion, JWT cumple con ese objetivo. 
+Al configurar el entorno de JWT, nos permite determinar el ciclo de vida de los tokens una vez firmados.
+Es por ello que, el servidor maneja una duracion de 1H para la finalizacion de su ciclo de vida. 
+Todas las rutas estan protegidas bajo un header especifico para el valor del Token.
+El cliente, deberia tomar determinar donde se establecera dicho token, puede ser en Cookies o en su LocalStorage por ejemplo.
+La persistencia del token en el lado del cliente les permitira tener el acceso con su token vigente.
+Por lo tanto, no es necesario crear un endpoint para este caso, la vigencia del token para los atacantes es corta, y si obtienen el mismo el tiempo reducido de la vigencia no seria utilizable.
+El logout, estaria vinculandose a la eliminacion del token del lado del cliente, lo que obligaria a iniciar sesion nuevamente. 
 
-# Generar migraciones de la base de datos
-npm run m:gen
-
-# Ejecutar migraciones de la base de datos
-npm run m:run
